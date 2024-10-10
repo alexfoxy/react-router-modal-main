@@ -1,16 +1,12 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { images } from '../data/dummy-data'
-import ImageModal from '../components/ImageModal'
-import UserModal from '../components/UserModal'
+import { useVM } from '../hooks/useVM'
+import GalleryVM from './GalleryVM'
+import { useParamListeners } from '../hooks/useParamListeners'
 
 const Gallery = () => {
-  const navigate = useNavigate()
-
-  const viewImage = (image) => {
-    const id = image.id
-    navigate('/gallery/' + id)
-  }
+  const vm = useVM(GalleryVM)
+  useParamListeners(vm.willFocus)
 
   return (
     <div className="gallery">
@@ -18,14 +14,13 @@ const Gallery = () => {
         <button
           key={image.id}
           className="gallery-item"
-          onClick={() => viewImage(image)}
+          onClick={() => vm.showImage(image.id)}
         >
           <img src={image.thumbnail} alt={`Thumbnail ${index + 1}`} />
         </button>
       ))}
 
-      <ImageModal />
-      <UserModal />
+      <Outlet />
     </div>
   )
 }

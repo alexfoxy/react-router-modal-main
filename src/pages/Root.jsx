@@ -1,7 +1,15 @@
-import { Outlet } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import { Outlet, useLocation } from 'react-router-dom'
+import Navbar from '../components/Navbar'
+
+export let navigations = 0
 
 const Root = () => {
+  const location = useLocation()
+
+  // useEffect(() => {
+  //   navigations += 1
+  // }, [ location ])
+
   return (
     <>
       <Navbar />
@@ -9,7 +17,7 @@ const Root = () => {
         <Outlet />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Root;
+export default Root

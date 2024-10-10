@@ -1,5 +1,5 @@
-import React from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import React, { createContext, useEffect } from 'react'
+import { createBrowserRouter, NavigationType, RouterProvider, useBlocker } from 'react-router-dom'
 import Gallery from './pages/Gallery'
 import Index from './pages/Index'
 import Root from './pages/Root'
@@ -22,14 +22,8 @@ const router = createBrowserRouter([
             element: <ImageModal />,
             children: [
               {
-                path: 'user',
-                element: null,
-                children: [
-                  {
-                    path: ':userId',
-                    element: <UserModal />,
-                  }
-                ]
+                path: 'user/:userId',
+                element: <UserModal />,
               },
             ],
           },
@@ -49,13 +43,31 @@ const router = createBrowserRouter([
   },
 ])
 
-function App() {
-  return (
-    <React.StrictMode>
-      <RouterProvider router={router}>
+export const RouterContext = createContext(router)
 
+function App() {
+
+  useEffect(() => {
+    router.subscribe((state) => {
+      // if (state.historyAction === NavigationType.Pop) {
+      //   console.log("WENT BACK")
+      // }
+
+      console.log(state)
+    })
+  }, [])
+
+  // useBlocker(() => {
+
+  // })
+
+  return (
+    // <React.StrictMode>
+    <RouterContext.Provider value={router}>
+      <RouterProvider router={router}>
       </RouterProvider>
-    </React.StrictMode>
+    </RouterContext.Provider>
+    // </React.StrictMode>
   )
 }
 
